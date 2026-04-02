@@ -1,1 +1,361 @@
+<!DOCTYPE html>
 
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nexa API High-performance blockchain data API">
+    <meta name="web" content="https://nexaapi.deno.dev">
+    <meta property="og:title" content="Nexa API">
+    <meta property="og:description" content="Nexa API High-performance blockchain data API">
+    <title>Nexa API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 1px solid #333333;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #999999;
+            font-size: 16px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-left: 3px solid #ffffff;
+            padding-left: 15px;
+        }
+
+        .endpoint-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .endpoint-card {
+            background-color: #111111;
+            border: 1px solid #222222;
+            padding: 20px;
+        }
+
+        .endpoint-card:hover {
+            border-color: #444444;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #222222;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .method.get {
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+        }
+
+        .method.post {
+            background-color: #1a1a1a;
+            border: 1px solid #555555;
+        }
+
+        .endpoint-path {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+        }
+
+        .endpoint-description {
+            font-size: 14px;
+            color: #999999;
+            margin-bottom: 15px;
+        }
+
+        .params {
+            font-size: 13px;
+            color: #666666;
+        }
+
+        .params strong {
+            color: #cccccc;
+        }
+
+        code {
+            background-color: #1a1a1a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #ffffff;
+        }
+
+        .info-box {
+            background-color: #111111;
+            border: 1px solid #222222;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #999999;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            color: #999999;
+            font-size: 14px;
+            padding: 5px 0;
+        }
+
+        .info-box li:before {
+            content: "→ ";
+            color: #ffffff;
+            margin-right: 8px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #333333;
+            text-align: center;
+            color: #666666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .endpoint-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1 style="display: flex; align-items: center; gap: 8px;"><img src="./nexa-logo-mark.png" alt="Nexa"
+                    width="64">NEXA API</h1>
+            <p class="subtitle">High-performance blockchain data API with caching.</p>
+        </header>
+        <div class="info-box">
+            <h3>API Information</h3>
+            <p>This API provides access to <a href="https://nexa.org">Nexa</a> blockchain data through optimized Electrum server connections
+                utilizing <a href="https://nexa.gitlab.io/rostrum/">Rostrum</a> protocol methods. We acknowledge and sincerely appreciate the operators of public
+                Rostrum servers, whose ongoing maintenance and contributions play an essential role in enabling this
+                service. Users are kindly reminded to access this service responsibly, ensuring that their usage does not place
+                undue load on public infrastructure or negatively impact the broader community.
+            </p>
+            <ul>
+                <li>Intelligent caching for improved performance</li>
+                <li>Request deduplication to reduce server load</li>
+                <li>Automatic failover across multiple servers</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Address Endpoints</h2>
+            <div class="endpoint-grid">
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/balance/:address</div>
+                    <div class="endpoint-description">Get NEXA balance for an address</div>
+                    <div class="params"><strong>Params:</strong> address (string)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/transactions/:address</div>
+                    <div class="endpoint-description">Get transaction history for an address</div>
+                    <div class="params"><strong>Query:</strong> limit, offset</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/utxos/:address</div>
+                    <div class="endpoint-description">Get unspent transaction outputs</div>
+                    <div class="params"><strong>Params:</strong> address (string)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Token Endpoints</h2>
+            <div class="endpoint-grid">
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/tokenbalance/:address</div>
+                    <div class="endpoint-description">Get token balance for an address</div>
+                    <div class="params"><strong>Params:</strong> address (string)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/tokentransactions/:address</div>
+                    <div class="endpoint-description">Get token transaction history</div>
+                    <div class="params"><strong>Query:</strong> limit, offset</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/genesis/:group</div>
+                    <div class="endpoint-description">Get token genesis information</div>
+                    <div class="params"><strong>Params:</strong> group (string)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/nftlist/:group</div>
+                    <div class="endpoint-description">Get list of NFTs in a group</div>
+                    <div class="params"><strong>Params:</strong> group (string)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Transaction Endpoints</h2>
+            <div class="endpoint-grid">
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/tx/:txhash</div>
+                    <div class="endpoint-description">Get decoded transaction data</div>
+                    <div class="params"><strong>Params:</strong> txhash (hex string)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/rawtx/:txhash</div>
+                    <div class="endpoint-description">Get raw transaction hex</div>
+                    <div class="params"><strong>Params:</strong> txhash (hex string)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">POST</span>
+                    <div class="endpoint-path">/broadcast/:tx</div>
+                    <div class="endpoint-description">Broadcast a signed transaction</div>
+                    <div class="params"><strong>Params:</strong> tx (hex string)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Blockchain Endpoints</h2>
+            <div class="endpoint-grid">
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/headers</div>
+                    <div class="endpoint-description">Get current block tip header with hash</div>
+                    <div class="params"><strong>Params:</strong> none</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/header/verbose</div>
+                    <div class="endpoint-description">Get verbose tip header with txcount and size</div>
+                    <div class="params"><strong>Params:</strong> none</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/header/verbose/:heightOrHash</div>
+                    <div class="endpoint-description">Get verbose header by height or block hash</div>
+                    <div class="params"><strong>Params:</strong> height (integer) or tx (hex string)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/block/:height</div>
+                    <div class="endpoint-description">Get full block data at height</div>
+                    <div class="params"><strong>Params:</strong> height (integer)</div>
+                </div>
+
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/mempool</div>
+                    <div class="endpoint-description">Get mempool transaction count</div>
+                    <div class="params"><strong>Params:</strong> none</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Advanced Endpoints</h2>
+            <div class="endpoint-grid">
+                <div class="endpoint-card">
+                    <span class="method get">GET</span>
+                    <div class="endpoint-path">/metrics</div>
+                    <div class="endpoint-description">Get API performance metrics</div>
+                    <div class="params"><strong>Params:</strong> none</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>NexaAPI v.3.0.</p>
+            <p>Fierce UTXO | 2025-2026</p>
+        </footer>
+    </div>
+</body>
+
+</html>
